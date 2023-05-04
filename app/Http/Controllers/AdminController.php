@@ -135,4 +135,20 @@ class AdminController extends Controller
 
         return redirect()->route('admin.view', $id)->with('success', 'User updated successfully');
     }
+
+    public function deleteUser(int $id)
+    {
+        $user = User::where('id', $id)->first();
+        if (!$user) {
+            return redirect()->route('admin.index')->with('error', 'User not found');
+        }
+
+        if ($id === Auth::user()->id) {
+            return redirect()->route('admin.view', $id)->with('error', 'You cannot delete your own account');
+        }
+
+        $user->delete();
+
+        return redirect()->route('admin.index')->with('success', 'User deleted successfully');
+    }
 }

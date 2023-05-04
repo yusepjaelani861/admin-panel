@@ -8,6 +8,15 @@
         class="text-white bg-gray-500 hover:bg-gray-600 px-4 py-2 rounded-lg">Back</button>
 
     <div class="p-4">
+        <form action="{{ route('admin.delete', $user->id) }}" method="POST" class="flex justify-end items-center py-2">
+            @csrf
+            @method('DELETE')
+            <button class="bg-red-500 hover:bg-red-700 text-white flex gap-2 font-bold py-2 px-4 rounded mr-2"
+                type="submit">
+                <p>Delete User</p>
+            </button>
+        </form>
+
         <div class="bg-white rounded-lg p-4 mb-4">
             <h2 class="text-xl font-bold mb-4">Profile</h2>
 
