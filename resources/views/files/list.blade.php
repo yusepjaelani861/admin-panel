@@ -63,7 +63,7 @@ function convertDate($date)
                                 <td class="border px-4 py-2">{{ $file->folders ? $file->folders->name : 'None' }}
                                 </td>
                                 <td class="border px-4 py-2 flex flex-col items-center justify-center">
-                                    <img :src="$file - > original_url" :alt="$file - > name"
+                                    <img src="{{ $file->original_url }}" alt="{{ $file->name }}"
                                         class="w-20 h-20 object-cover" />
                                     <p>{{ $file->name }}</p>
                                 </td>
