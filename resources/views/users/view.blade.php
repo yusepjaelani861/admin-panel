@@ -28,20 +28,32 @@ function formatPrice($price)
         class="text-white bg-gray-500 hover:bg-gray-600 px-4 py-2 rounded-lg">Back</button>
 
     <div class="p-4">
-        <form action="{{ route('files.empty.user') }}" method="POST" class="flex justify-end items-center">
-            @csrf
-            @method('POST')
-            <input type="hidden" name="user_id" value="{{ $user->id }}">
-            <button class="bg-red-500 hover:bg-red-700 text-white flex gap-2 font-bold py-2 px-4 rounded mr-2"
-                type="submit">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                    stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                </svg>
-                <p>Empty Storage</p>
-            </button>
-        </form>
+        <div class="flex md:flex-row flex-col gap-2 justify-end">
+            <form action="{{ route('files.backup') }}" method="POST" class="flex justify-end items-center">
+                @csrf
+                @method('POST')
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white flex gap-2 font-bold py-2 px-4 rounded mr-2"
+                    type="submit">
+                    <p>Backup Storage</p>
+                </button>
+            </form>
+
+            <form action="{{ route('files.empty.user') }}" method="POST" class="flex justify-end items-center">
+                @csrf
+                @method('POST')
+                <input type="hidden" name="user_id" value="{{ $user->id }}">
+                <button class="bg-red-500 hover:bg-red-700 text-white flex gap-2 font-bold py-2 px-4 rounded mr-2"
+                    type="submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                    </svg>
+                    <p>Empty Storage</p>
+                </button>
+            </form>
+        </div>
 
         <div class="md:grid md:grid-cols-3 grid-cols-2 w-full">
             <x-card-box title="Total Files"
@@ -195,7 +207,7 @@ function formatPrice($price)
                                 <td class="border px-4 py-2">{{ $file->id }}</td>
                                 <td class="border px-4 py-2">{{ $file->folders ? $file->folders->name : 'None' }}</td>
                                 <td class="border px-4 py-2 flex flex-col items-center justify-center">
-                                    <img src="{{$file->original_url }}" alt="{{ $file->name }}"
+                                    <img src="{{ $file->original_url }}" alt="{{ $file->name }}"
                                         class="w-20 h-20 object-cover" />
                                     <p>{{ $file->name }}</p>
                                 </td>

@@ -85,4 +85,38 @@ class FilesController extends Controller
 
         return redirect()->route('users.view', $request->user_id)->with('success', 'Storage emptied');
     }
+
+    public function backupStorage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->route('users.index')->with('error', 'Invalid user id');
+        }
+
+        $files = Files::where([
+            'user_id' => $request->user_id
+        ])->count();
+
+        if ($files <= 0) {
+            return redirect()->route('users.view', $request->user_id)->with('error', 'Storage is empty');
+        }
+
+        $response = Http::withHeaders([
+            'X-Cross-Key' => env('CROSS_KEY')
+        ])
+            ->post(env('CDN_URL') . '/api/admin/files/backup', [
+                'user_id' => $request->user_id
+            ]);
+
+        // return response()->json($response->json());
+
+        if ($response->status() !== 200) {
+            return redirect()->route('users.view', $request->user_id)->with('error', 'Failed to backup storage');
+        }
+
+        return redirect()->route('users.view', $request->user_id)->with('success', 'Storage success backup');
+    }
 }

@@ -45,6 +45,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('files')->group(function () {
         Route::get('/', [FilesController::class, 'list'])->name('files.index');
+        Route::post('/backup', [FilesController::class, 'backupStorage'])->name('files.backup');
         Route::post('/user/empty', [FilesController::class, 'emptyStorage'])->name('files.empty.user');
         Route::delete('/{id}', [FilesController::class, 'delete'])->name('files.delete');
     });
