@@ -50,7 +50,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::delete('/{id}', [FilesController::class, 'delete'])->name('files.delete');
     });
 
-    Route::get('/transactions', [TransactionController::class, 'list'])->name('transactions.index');
+    Route::prefix('transactions')->group(function () {
+        Route::get('/', [TransactionController::class, 'list'])->name('transactions.index');
+    });
 
     Route::prefix('/subscription')->group(function () {
         Route::get('/', [SubscriptionController::class, 'listSubscription'])->name('subscriptions.index');

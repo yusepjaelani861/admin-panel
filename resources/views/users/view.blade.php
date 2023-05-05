@@ -55,6 +55,7 @@ function formatPrice($price)
             </form>
         </div>
 
+        
         <div class="md:grid md:grid-cols-3 grid-cols-2 w-full">
             <x-card-box title="Total Files"
                 icon='<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="shrink-0 w-12 h-12">

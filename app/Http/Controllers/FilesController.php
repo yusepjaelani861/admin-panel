@@ -111,8 +111,6 @@ class FilesController extends Controller
                 'user_id' => $request->user_id
             ]);
 
-        // return response()->json($response->json());
-
         if ($response->status() !== 200) {
             return redirect()->route('users.view', $request->user_id)->with('error', 'Failed to backup storage');
         }
