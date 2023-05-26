@@ -96,10 +96,13 @@ class FilesController extends Controller
             return redirect()->route('files.index')->with('error', 'File not found');
         }
 
+        $url = $file->original_url;
+        $domain = 'https://' . parse_url($url, PHP_URL_HOST);
+
         $response = Http::withHeaders([
             'X-Cross-Key' => env('CROSS_KEY')
         ])
-            ->delete(env('CDN_URL') . '/api/admin/files/delete/' . $file->id);
+            ->delete($domain . '/api/admin/files/delete/' . $file->id);
 
         if ($response->status() !== 200) {
             return redirect()->route('files.index')->with('error', 'Failed to delete file');
