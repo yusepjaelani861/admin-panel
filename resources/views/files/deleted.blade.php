@@ -52,7 +52,8 @@ function convertDate($date)
                             <th class="px-4 py-2">Name</th>
                             <th class="px-4 py-2">Size</th>
                             <th class="px-4 py-2">Created At</th>
-                            <th class="px-4 py-2">Actions</th>
+                            <th class="px-4 py-2">Deleted At</th>
+                            {{-- <th class="px-4 py-2">Actions</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -60,21 +61,15 @@ function convertDate($date)
                             <tr>
                                 <td class="border px-4 py-2">{{ $file->id }}</td>
                                 <td class="border px-4 py-2"><a class="text-blue-500 hover:text-blue-700 font-semibold" href="{{ route('users.view', $file->user->id) }}" target="_blank">{{ $file->user->name }}</a></td>
-                                <td class="border px-4 py-2"><a class="text-blue-500 hover:text-blue-700 font-semibold" href="{{ 
-                                    $file->folders ? route('files.index', [
-                                        'folder' => $file->folders->name,
-                                    ]) : '#'
-                                }}" target="_blank">{{ $file->folders ? $file->folders->name : 'None' }}</a></td>
-                                {{-- <td class="border px-4 py-2">{{ $file->folders ? $file->folders->name : 'None' }}
-                                </td> --}}
-                                <td class="border px-4 py-2 flex flex-col items-center justify-center">
-                                    <img src="{{ $file->original_url }}" alt="{{ $file->name }}"
-                                        class="w-20 h-20 object-cover" />
-                                    <p>{{ $file->name }}</p>
+                                <td class="border px-4 py-2">{{ $file->folders ? $file->folders->name : 'None' }}
+                                </td>
+                                <td class="border px-4 py-2">
+                                    {{ $file->name }}
                                 </td>
                                 <td class="border px-4 py-2">{{ formatSize($file->size) }}</td>
                                 <td class="border px-4 py-2">{{ convertDate($file->created_at) }}</td>
-                                <td class="px-4 py-2 flex gap-2 items-center">
+                                <td class="border px-4 py-2">{{ convertDate($file->updated_at) }}</td>
+                                {{-- <td class="px-4 py-2 flex gap-2 items-center">
                                     <a href="{{ $file->original_url }}"
                                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                         target="_blank">View</a>
@@ -85,7 +80,7 @@ function convertDate($date)
                                         <button
                                             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
                                     </form>
-                                </td>
+                                </td> --}}
                             </tr>
                         @endforeach
                         @if (count($files) == 0)

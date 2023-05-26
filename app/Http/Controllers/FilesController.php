@@ -16,9 +16,15 @@ class FilesController extends Controller
         if (!$this->protect()) {
             return redirect()->route('dashboard');
         }
-        
+
         $files = Files::orderBy('id', 'desc')
             ->with('folders', 'user');
+
+        if ($request->folder) {
+            $files = $files->whereHas('folders', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->folder . '%');
+            });
+        }
 
         if ($request->search) {
             $files = $files->where(function ($query) use ($request) {
@@ -32,11 +38,51 @@ class FilesController extends Controller
             });
         }
 
+        $files->where('status', true);
+
         $files = $files->paginate((int) $request->limit ?? 20);
 
         $files->appends($request->all());
 
         return view('files.list', [
+            'files' => $files
+        ]);
+    }
+
+    public function deletedList(Request $request)
+    {
+        if (!$this->protect()) {
+            return redirect()->route('dashboard');
+        }
+
+        $files = Files::orderBy('id', 'desc')
+            ->with('folders', 'user');
+
+        if ($request->folder) {
+            $files = $files->whereHas('folders', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->folder . '%');
+            });
+        }
+
+        if ($request->search) {
+            $files = $files->where(function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            });
+        }
+
+        if ($request->user) {
+            $files = $files->whereHas('user', function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->user . '%');
+            });
+        }
+
+        $files->where('status', false);
+
+        $files = $files->paginate((int) $request->limit ?? 20);
+
+        $files->appends($request->all());
+
+        return view('files.deleted', [
             'files' => $files
         ]);
     }
