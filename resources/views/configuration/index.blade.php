@@ -27,7 +27,7 @@
 
                     <label class="mb-4 flex gap-2 items-start">
                         <span class="text-gray-700 dark:text-gray-400 flex-shrink-0 w-[150px]">Ads Body:</span>
-                        <textarea name="ads_body" id="ads_body" cols="30" rows="10"
+                        <textarea name="ads_body" cols="30" rows="10"
                             class="outline-none mt-1 block w-full rounded-lg" placeholder="<div>Paste di sini bang</div>">{!! $ads_body !!}</textarea>
                     </label>
 
@@ -39,7 +39,7 @@
 
                     <label class="mb-4 flex gap-2 items-start">
                         <span class="text-gray-700 dark:text-gray-400 flex-shrink-0 w-[150px]">Script Ads:</span>
-                        <textarea name="ads_script" id="ads_script" cols="30" rows="10"
+                        <textarea name="ads_script" cols="30" rows="10"
                             class="outline-none mt-1 block w-full rounded-lg" placeholder="<script>Paste di sini bang</script>">{!! $ads_script !!}</textarea>
                     </label>
 
