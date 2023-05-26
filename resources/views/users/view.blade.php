@@ -29,7 +29,7 @@ function formatPrice($price)
 
     <div class="p-4">
         <div class="flex md:flex-row flex-col gap-2 justify-end">
-            <form action="{{ route('files.backup') }}" method="POST" class="flex justify-end items-center">
+            {{-- <form action="{{ route('files.backup') }}" method="POST" class="flex justify-end items-center">
                 @csrf
                 @method('POST')
                 <input type="hidden" name="user_id" value="{{ $user->id }}">
@@ -37,7 +37,7 @@ function formatPrice($price)
                     type="submit">
                     <p>Backup Storage</p>
                 </button>
-            </form>
+            </form> --}}
 
             <form action="{{ route('files.empty.user') }}" method="POST" class="flex justify-end items-center">
                 @csrf
