@@ -21,7 +21,7 @@
 
                     <label class="mb-4 flex gap-2 items-start">
                         <span class="text-gray-700 dark:text-gray-400 flex-shrink-0 w-[150px]">Ads Header:</span>
-                        <textarea name="ads_header" id="ads_header" cols="30" rows="10"
+                        <textarea name="ads_header" cols="30" rows="10"
                             class="outline-none mt-1 block w-full rounded-lg" placeholder="<div>Paste di sini bang</div>">{!! $ads_header !!}</textarea>
                     </label>
 
@@ -33,7 +33,7 @@
 
                     <label class="mb-4 flex gap-2 items-start">
                         <span class="text-gray-700 dark:text-gray-400 flex-shrink-0 w-[150px]">Ads Footer:</span>
-                        <textarea name="ads_footer" id="ads_footer" cols="30" rows="10"
+                        <textarea name="ads_footer" cols="30" rows="10"
                             class="outline-none mt-1 block w-full rounded-lg" placeholder="<div>Paste di sini bang</div>">{!! $ads_footer !!}</textarea>
                     </label>
 
