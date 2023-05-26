@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ConfigurationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FilesController;
 use App\Http\Controllers\ProfileController;
@@ -45,7 +46,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::prefix('files')->group(function () {
         Route::get('/', [FilesController::class, 'list'])->name('files.index');
-        Route::post('/backup', [FilesController::class, 'backupStorage'])->name('files.backup');
+        Route::get('/trash', [FilesController::class, 'deletedList'])->name('files.trash');
+        // Route::post('/backup', [FilesController::class, 'backupStorage'])->name('files.backup');
         Route::post('/user/empty', [FilesController::class, 'emptyStorage'])->name('files.empty.user');
         Route::delete('/{id}', [FilesController::class, 'delete'])->name('files.delete');
     });
@@ -61,6 +63,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/create', [SubscriptionController::class, 'createSubscription']);
         Route::post('/{id}/update', [SubscriptionController::class, 'updateSubscription'])->name('subscriptions.update');
         Route::delete('/{id}', [SubscriptionController::class, 'deleteSubscription'])->name('subscriptions.delete');
+    });
+
+    Route::prefix('configuration')->group(function () {
+        Route::get('/', [ConfigurationController::class, 'view'])->name('configuration.index');
+        Route::post('/update', [ConfigurationController::class, 'update'])->name('configuration.update');
     });
 });
 
