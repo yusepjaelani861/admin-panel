@@ -49,6 +49,7 @@ class UserController extends Controller
 
             $usage = Files::where([
                 'user_id' => $user->id,
+                'status' => true,
             ])->sum('size');
 
             $user->log = $log;
@@ -94,6 +95,7 @@ class UserController extends Controller
 
         $files = Files::where([
             'user_id' => $user->id,
+            'status' => true,
         ])->with('folders')
         ->orderBy('id', 'desc')
         ->paginate((int) $request->limit ?? 15);

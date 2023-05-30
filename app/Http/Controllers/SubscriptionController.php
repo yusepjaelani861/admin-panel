@@ -71,6 +71,7 @@ class SubscriptionController extends Controller
 
             $usage = Files::where([
                 'user_id' => $user->id,
+                'status' => true,
             ])->sum('size');
 
             $user->log = $log;

@@ -146,7 +146,8 @@ class FilesController extends Controller
         }
 
         $files = Files::where([
-            'user_id' => $request->user_id
+            'user_id' => $request->user_id,
+            'status' => true,
         ])->count();
 
         if ($files <= 0) {
