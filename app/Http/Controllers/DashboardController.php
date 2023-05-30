@@ -19,9 +19,13 @@ class DashboardController extends Controller
                 return view($role_user ? 'viewers.index' : 'dashboard', $cache);
         }
 
-        $total_files = Files::count();
+        $total_files = Files::where([
+            'status' => true,
+        ])->count();
         $total_users = User::count();
-        $total_usage = Files::sum('size');
+        $total_usage = Files::where([
+            'status' => true,
+        ])->sum('size');
         $total_earning = Transaction::where('status', 'PAID')->sum('amount');
 
         Cache::put('dashboard', [

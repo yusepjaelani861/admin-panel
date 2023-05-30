@@ -22,7 +22,8 @@ class Files extends Model
         'extension',
         'mime_type',
         'original_url',
-        'views'
+        'views',
+        'status',
     ];
 
     public function user()
