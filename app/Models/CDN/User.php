@@ -30,7 +30,7 @@ class User extends Model
 
     public function files()
     {
-        return $this->hasMany(Files::class);
+        return $this->hasMany(Files::class)->where('status', true);
     }
 
     public function folders()
