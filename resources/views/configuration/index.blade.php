@@ -16,7 +16,7 @@
                     <label class="mb-4 flex gap-2 items-center">
                         <span class="text-gray-700 dark:text-gray-400 flex-shrink-0 w-[150px]">Domain Upload:</span>
                         <input type="text" class="outline-none mt-1 block w-full rounded-lg" name="upload_domain"
-                            placeholder="https://upload.domain.com" />
+                            placeholder="https://upload.domain.com" value="{{ $upload_domain }}" />
                     </label>
 
                     <label class="mb-4 flex gap-2 items-start">
