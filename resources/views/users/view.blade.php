@@ -150,7 +150,7 @@ function formatPrice($price)
                     </thead>
                     <tbody>
                         @foreach ($transactions as $key => $transaction)
-                            <td class="border px-4 py-2">{{ $transaction->merchant_ref }}</td>
+                            <td class="border px-4 py-2">{{ $transaction->reference }}</td>
                             <td class="border px-4 py-2">{{ convertDate($transaction->created_at) }}</td>
                             <td class="border px-4 py-2">
                                 {{ formatPrice($transaction->amount) }}
