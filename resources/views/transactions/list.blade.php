@@ -55,7 +55,7 @@ function formatPrice($price)
                             <th class="px-4 py-2">Username</th>
                             <th class="px-4 py-2">Date</th>
                             <th class="px-4 py-2">Amount</th>
-                            <th class="px-4 py-2">Fee</th>
+                            {{-- <th class="px-4 py-2">Fee</th> --}}
                             <th class="px-4 py-2">Method</th>
                             <th class="px-4 py-2">Status</th>
                         </tr>
@@ -65,11 +65,12 @@ function formatPrice($price)
                             <td class="border px-4 py-2">{{ $transaction->reference }}</td>
                             <td class="border px-4 py-2">{{ $transaction->user->name }}</td>
                             <td class="border px-4 py-2">{{ convertDate($transaction->created_at) }}</td>
-                            <td class="border px-4 py-2">
+                            <td class="border px-4 py-2">{{ formatPrice($transaction->amount) }}</td>
+                            {{-- <td class="border px-4 py-2">
                                 {{ formatPrice($transaction->amount - json_decode($transaction->data)->total_fee) }}
                             </td>
                             <td class="border px-4 py-2">{{ formatPrice(json_decode($transaction->data)->total_fee) }}
-                            </td>
+                            </td> --}}
                             <td class="border px-4 py-2">{{ json_decode($transaction->data)->payment_name }}</td>
                             <td class="border px-4 py-2 font-bold <?php
                             switch ($transaction->status) {
