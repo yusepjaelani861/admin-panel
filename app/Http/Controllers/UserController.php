@@ -60,7 +60,9 @@ class UserController extends Controller
             return redirect()->route('dashboard');
         }
 
-        $user = User::where('id', $id)->with('roles', 'files', 'folders')->first();
+        $user = User::where('id', $id)->with('roles')
+            ->withCount('files', 'folders')
+            ->first();
 
         if (!$user) {
             return redirect()->route('users.list')->with('error', 'User not found');
@@ -89,6 +91,8 @@ class UserController extends Controller
             ->paginate((int) $request->limit ?? 15);
 
         $roles = Role::all();
+
+        $user->size = Files::where('user_id', $user->id)->sum('size');
 
         // return response()->json($session);
 
