@@ -98,7 +98,15 @@ function formatPrice($price)
                         <label class="mb-4 flex gap-2 items-center">
                             <span class="text-gray-700 dark:text-gray-400 flex-shrink-0 w-[100px]">Role:</span>
                             <div class="flex gap-2">
-                                <p class="py-1 px-2 rounded-lg bg-orange-500 font-bold">{{ $user->role->name }}</p>
+                                <p class="py-1 px-2 rounded-lg bg-orange-500 font-bold">
+                                    <?php
+                                        if (count($user->roles) > 0) {
+                                            echo $user->roles[0]->name;
+                                        } else {
+                                            echo 'Free';
+                                        }
+                                    ?>
+                                </p>
                                 <button type="button" class="py-1 px-2 rounded-lg text-blue-500 hover:text-blue-600"
                                     onclick="modalHandler('open')">Change</button>
                             </div>
@@ -249,7 +257,15 @@ function formatPrice($price)
                     <select name="role_id" id="role"
                         class="w-full border border-gray-400 rounded px-3 py-2 mt-1 mb-5 text-gray-700 focus:outline-none focus:border-blue-700">
                         @foreach ($roles as $role)
-                            <option value="{{ $role->id }}" <?php echo $user->role_id == $role->id ? 'selected' : ''; ?>>{{ $role->name }}</option>
+                            <option value="{{ $role->id }}" 
+                                <?php
+                                    if (count($user->roles) > 0) {
+                                        if ($user->roles[0]->id == $role->id) {
+                                            echo 'selected';
+                                        }
+                                    }
+                                ?>
+                                >{{ $role->name }}</option>
                         @endforeach
                     </select>
 

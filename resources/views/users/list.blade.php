@@ -71,13 +71,22 @@ function formatSize($size)
                         <td class="border px-4 py-2">{{ $user->id }}</td>
                         <td class="border px-4 py-2">{{ $user->name }}</td>
                         <td class="border px-4 py-2">{{ $user->email }}</td>
-                        <td class="border px-4 py-2 font-bold">{{ $user->role->name }}</td>
+                        <td class="border px-4 py-2 font-bold">
+                            <?php
+                            if (count($user->roles) > 0) {
+                                echo $user->roles[0]->name;
+                            } else {
+                                echo 'Free';
+                            }
+                            ?>
+                        </td>
                         <td
                             class="border px-4 py-2 font-bold {{ $user->role_id === 1 && $user->usage >= 100000000 ? 'text-red-500 font-bold' : '' }}">
                             {{ formatSize($user->usage) }}</td>
                         <td
-                            class="border px-4 py-2 font-bold {{ $user->log && $user->log->end_date < now() ? 'text-red-500' : '' }} {{ $user->log && $user->log->role_id !== $user->role_id ? 'text-yellow-500' : '' }} {{ $user->role_id === 1 ? 'text-green-500' : '' }}">
-                            {{ $user->log ? convertDate($user->log->end_date) : 'Lifetime' }}</td>
+                            class="border px-4 py-2 font-bold">
+                            ${{ $user->balance }}
+                            </td>
                         <td class="border px-4 py-2 flex gap-2">
                             <a href="{{ route('users.view', $user->id) }}"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 items-center flex flex-col rounded">View</a>

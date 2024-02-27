@@ -23,9 +23,10 @@ class User extends Model
         'remember_token'
     ];
 
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo(Role::class);
+        // return $this->hasMany(UserRole::class);
+        return $this->hasManyThrough(Role::class, UserRole::class, 'user_id', 'id', 'id', 'role_id');
     }
 
     public function files()
@@ -35,7 +36,7 @@ class User extends Model
 
     public function folders()
     {
-        return $this->hasMany(Folder::class)->where('status', 1)->orderBy('name', 'asc');
+        return $this->hasMany(Folder::class)->orderBy('name', 'asc');
     }
 
     public function subscription()

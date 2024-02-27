@@ -7,8 +7,9 @@ use App\Models\CDN\Roles\Role;
 use App\Models\CDN\Subscription;
 use App\Models\CDN\Transaction;
 use App\Models\CDN\User;
+use App\Models\CDN\UserRole;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -19,7 +20,7 @@ class UserController extends Controller
             return redirect()->route('dashboard');
         }
 
-        $users = User::with('role')
+        $users = User::with('roles')
             ->orderBy('id', 'desc');
 
         if ($request->search) {
@@ -28,34 +29,23 @@ class UserController extends Controller
         }
 
         if ($request->role) {
-            $users = $users->where('role_id', (int) $request->role);
-        }
-
-        if ($request->expired) {
-            $users = $users->whereHas('subscription', function ($query) {
-                $query->where('end_date', '<=', now())
-                    ->orWhere('end_date', '<=', now()->subDays(28));
+            // $users = $users->where('role_id', (int) $request->role);
+            $users = $users->whereHas('roles', function ($query) use ($request) {
+                $query->where('role_id', (int) $request->role);
             });
         }
 
-        $users = $users->paginate((int) $request->limit ?? 15);
-
-        foreach ($users as $user) {
-            $log = Subscription::where([
-                'user_id' => $user->id,
-            ])
-                ->orderBy('end_date', 'desc')
-                ->first();
-
-            $usage = Files::where([
-                'user_id' => $user->id,
-            ])->sum('size');
-
-            $user->log = $log;
-            $user->usage = $usage;
+        if ($request->expired) {
+            $users = $users->orderBy('balance', 'asc');
         }
 
+        $users = $users->paginate((int) $request->limit ?? 15);
         $users->appends($request->all());
+
+        foreach ($users as $user) {
+            $user->usage = Files::where('user_id', $user->id)->sum('size');
+        }
+
         $roles = Role::all();
 
         return view('users.list', [
@@ -69,34 +59,34 @@ class UserController extends Controller
         if (!$this->protect()) {
             return redirect()->route('dashboard');
         }
-        
-        $user = User::where('id', $id)->with('role', 'files', 'folders')->first();
+
+        $user = User::where('id', $id)->with('roles', 'files', 'folders')->first();
 
         if (!$user) {
             return redirect()->route('users.list')->with('error', 'User not found');
         }
 
-        $log = Subscription::where([
-            'user_id' => $user->id,
-            'role_id' => $user->role_id
-        ])
-            ->where('end_date', '>=', now())
-            ->orderBy('end_date', 'desc')
-            ->first();
+        // $log = Subscription::where([
+        //     'user_id' => $user->id,
+        //     'role_id' => $user->role_id
+        // ])
+        //     ->where('end_date', '>=', now())
+        //     ->orderBy('end_date', 'desc')
+        //     ->first();
 
-        $user->log = $log;
+        // $user->log = $log;
 
         $transactions = Transaction::where([
             'user_id' => $user->id,
         ])->whereIn('status', ['PAID', 'UNPAID'])
-        ->orderBy('id', 'desc')
-        ->paginate((int) $request->limit ?? 15);
+            ->orderBy('id', 'desc')
+            ->paginate((int) $request->limit ?? 15);
 
         $files = Files::where([
             'user_id' => $user->id,
         ])->with('folders')
-        ->orderBy('id', 'desc')
-        ->paginate((int) $request->limit ?? 15);
+            ->orderBy('id', 'desc')
+            ->paginate((int) $request->limit ?? 15);
 
         $roles = Role::all();
 
@@ -147,19 +137,44 @@ class UserController extends Controller
             return redirect()->back()->withInput()->with('error', $validator->errors()->first());
         }
 
-        $role = Role::where('id', $request->role_id)->first();
-        if (!$role) {
-            return redirect()->back()->with('error', 'Role not found');
+        DB::beginTransaction();
+
+        try {
+            //code...
+            $role = Role::where('id', $request->role_id)->first();
+            if (!$role) {
+                return redirect()->back()->with('error', 'Role not found');
+            }
+
+            $user = User::where('id', $id)->first();
+            if (!$user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
+
+            $userRoles = UserRole::where('user_id', $user->id)->orderBy('id', 'desc')->first();
+
+            if ($userRoles) {
+                $userRoles->role_id = $request->role_id;
+                $userRoles->save();
+            } else {
+                UserRole::create([
+                    'user_id' => $user->id,
+                    'role_id' => $request->role_id,
+                ]);
+            }
+
+            $user->role_id = $request->role_id;
+            $user->balance = $user->balance + $role->price;
+            $user->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'User updated');
+        } catch (\Throwable $th) {
+            //throw $th;
+            DB::rollBack();
+            return redirect()->back()->with('error', $th->getMessage());
         }
 
-        $user = User::where('id', $id)->first();
-        if (!$user) {
-            return redirect()->back()->with('error', 'User not found');
-        }
-
-        $user->role_id = $request->role_id;
-        $user->save();
-
-        return redirect()->back()->with('success', 'User updated');
     }
 }
